@@ -3,8 +3,7 @@
 
 
 int main(){
-  Grid a;
-  a.set(500,500,20,10);
+  Grid a(500,500,10,10,true);
   a.setDepth(10);
   double k;
   k = a.get_x();

@@ -2,17 +2,15 @@
 #define GRID_H
 class Grid{
   private:
-    double x;
-    double y;
-    double** h;
-    double dx;
-    double dy;
-    bool flat;
+    double x_length; // length in x direction
+    double y_length; // length in y direction
+    double** h; // the depth in 2 dimension
+    double dx; //grid spacing in x direction
+    double dy; // grid spacing in y direction
+    bool isflat; // the depth type
   public:
-    Grid();
+    Grid(double, double, double, double, bool);
     void setDepth(double m_h);
-//    void show();
-    void set(double m_x, double m_y, double m_dx, double m_dy );
     double get_x();
     double get_y();
     double get_dx();
