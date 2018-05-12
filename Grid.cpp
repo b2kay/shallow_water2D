@@ -13,15 +13,15 @@ Grid::Grid(double m_x, double m_y, double m_dx, double m_dy, bool m_flat) : x_le
 //  std::cout<<"dy : " << dy << std::endl;
 //}
 void Grid::setDepth(double m_h){
-  int Nx = x_length/dx+2;
-  int Ny = y_length/dy+2;
-  h = new double*[Nx];
+  grid_dimx= x_length/dx+2;
+  grid_dimy = y_length/dy+2;
+  h = new double*[grid_dimx];
   if(isflat){
-    for(int i = 0; i < Nx; i++){
-      h[i] = new double[Ny];
+    for(int i = 0; i < grid_dimx; i++){
+      h[i] = new double[grid_dimy];
     }
-    for(int i = 0; i < Nx; i++){
-      for(int j = 0; j < Ny; j++){
+    for(int i = 0; i < grid_dimx; i++){
+      for(int j = 0; j < grid_dimy; j++){
         h[i][j] = m_h;
         std::cout << i << " : " << j << " = " << h[i][j]<< std::endl;
       }
@@ -42,6 +42,12 @@ double Grid::get_dx(){
 }
 double Grid::get_dy(){
   return dy;
+}
+int Grid::get_grid_dimx(){
+  return grid_dimx;
+}
+int Grid::get_grid_dimy(){
+  return grid_dimy;
 }
 void Grid::show(){
   std::cout << x_length/dx << std::endl;

@@ -8,6 +8,7 @@ class Grid{
     double dx; //grid spacing in x direction
     double dy; // grid spacing in y direction
     bool isflat; // the depth type
+    int grid_dimx, grid_dimy;
   public:
     Grid(double, double, double, double, bool);
     void setDepth(double m_h);
@@ -15,6 +16,8 @@ class Grid{
     double get_y();
     double get_dx();
     double get_dy();
+    int get_grid_dimx();
+    int get_grid_dimy();
     void show();
     void maxDepth();
     void minDepth();
