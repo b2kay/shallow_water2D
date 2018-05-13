@@ -43,6 +43,9 @@ double Grid::get_dx(){
 double Grid::get_dy(){
   return dy;
 }
+double** Grid::get_h(){
+  return h;
+}
 int Grid::get_grid_dimx(){
   return grid_dimx;
 }

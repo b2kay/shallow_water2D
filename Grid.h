@@ -16,6 +16,7 @@ class Grid{
     double get_y();
     double get_dx();
     double get_dy();
+    double** get_h();
     int get_grid_dimx();
     int get_grid_dimy();
     void show();
