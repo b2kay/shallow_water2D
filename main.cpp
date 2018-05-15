@@ -1,4 +1,5 @@
 #include<iostream>
+#include<fstream>
 #include "Grid.h"
 #include <cmath>
 #include <cmath>
@@ -108,17 +109,22 @@ int solve(Grid myGrid, float dt,float time, float epsilon){
 }
 
 int main(){
-//  //open params.txt and read
-//  ifstream inputs;
-//  inputs.open("params.txt");
-//  double x,y,dx,dy
-//  while(inputs >> x >> y >>)
-  Grid a(500,500,10,10,true);
-  a.setDepth(10);
-  double k;
-//  k = a.get_grid_dimx();
-//  std::cout << k<< std::endl;
-  a.show();
-  solve(a, 0.1, 100, 0.1);
-  return 0;
+    // open param.txt and read
+    ifstream input;
+    input.open("param.txt");
+    double params[4];
+    int i = 0;
+    while(!input.eof()){
+        input >> params[i]; 
+        i++;
+    }
+    
+    Grid a(500,500,params[0],params[1],true);
+    a.setDepth(10);
+    double k;
+//    k = a.get_grid_dimx();
+//    std::cout << k<< std::endl;
+    a.show();
+    solve(a, params[2], params[3], 0.1);
+    return 0;
 }
