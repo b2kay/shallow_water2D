@@ -13,7 +13,7 @@ int solve(Grid myGrid, float dt,float time, float epsilon){
     if (min_spacing > myGrid.get_dy())
         min_spacing = myGrid.get_dy();
     if(dt > (min_spacing / (sqrt(2*gravity*10)) )){
-        cout << " Error !Stability Criteria is not satisfied." << endl;
+        cout << "Error! Stability Criteria is not satisfied." << endl;
     }
   
     //allocate velocity components and water height 
@@ -23,7 +23,6 @@ int solve(Grid myGrid, float dt,float time, float epsilon){
     double** zeta_star;
     int xdim =  myGrid.get_grid_dimx();
     int ydim =  myGrid.get_grid_dimy();
-    std::cout << xdim<< std::endl;
     u = new double*[xdim];
     v = new double*[xdim];
     zeta = new double*[xdim];
@@ -44,7 +43,7 @@ int solve(Grid myGrid, float dt,float time, float epsilon){
       }
     }
     zeta[xdim/2][ydim/2] = 1.0;
-    zeta_star[xdim/2][ydim/2] = 1.0;
+//    zeta_star[xdim/2][ydim/2] = 1.0;
 //    std::cout <<  zeta[xdim/2][ydim/2] << std::endl;
 
     double x = myGrid.get_x();
@@ -98,7 +97,7 @@ int solve(Grid myGrid, float dt,float time, float epsilon){
 
             if(t%5==0){
                     //std::cout <<  zeta[xdim/2][ydim/2] << std::endl;
-                    std::cout <<  t/5 << std::endl;
+//                    std::cout <<  t/5 << std::endl;
                     var_z->put_rec(&zeta[0][0],t/5);
             }
 
@@ -121,9 +120,6 @@ int main(){
     
     Grid a(500,500,params[0],params[1],true);
     a.setDepth(10);
-    double k;
-//    k = a.get_grid_dimx();
-//    std::cout << k<< std::endl;
     a.show();
     solve(a, params[2], params[3], 0.1);
     return 0;

@@ -53,7 +53,9 @@ int Grid::get_grid_dimy(){
   return grid_dimy;
 }
 void Grid::show(){
-  std::cout << x_length/dx << std::endl;
+  std::cout << "Grid resolution : " << x_length/dx+2 << "x" << y_length/dy+2  << std::endl;
+  std::cout << "Max Depth : "  << std::endl;
+  std::cout << "Min Depth : "  << std::endl;
 }
 void Grid::maxDepth(){
 }
