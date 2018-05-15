@@ -23,7 +23,7 @@ void Grid::setDepth(double m_h){
     for(int i = 0; i < grid_dimx; i++){
       for(int j = 0; j < grid_dimy; j++){
         h[i][j] = m_h;
-        std::cout << i << " : " << j << " = " << h[i][j]<< std::endl;
+//        std::cout << i << " : " << j << " = " << h[i][j]<< std::endl;
       }
     }
     

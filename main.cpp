@@ -1,6 +1,8 @@
 #include<iostream>
 #include "Grid.h"
 #include <cmath>
+#include <cmath>
+#include <netcdfcpp.h>
 using namespace std;
 const double gravity = 9.81;
 
@@ -10,7 +12,7 @@ int solve(Grid myGrid, float dt,float time, float epsilon){
     if (min_spacing > myGrid.get_dy())
         min_spacing = myGrid.get_dy();
     if(dt > (min_spacing / (sqrt(2*gravity*10)) )){
-        cout << " time spacing is too large." << endl;
+        cout << " Error !Stability Criteria is not satisfied." << endl;
     }
   
     //allocate velocity components and water height 
@@ -31,32 +33,38 @@ int solve(Grid myGrid, float dt,float time, float epsilon){
       zeta[i] = new double[ydim];
       zeta_star[i] = new double[ydim];
     }
+    // initialize u v zeta
     for(int i = 0; i < xdim; i++){
       for(int j = 0; j < ydim; j++){
-//         if(i == xdim/2 && j == ydim/2){
-//            u[i][j] = 0.0;
-//            v[i][j] = 0.0;
-//            zeta[i][j] = 1.0;
-//            zeta_star[i][j] = 1.0;
-//         }else{
             u[i][j] = 0.0;
             v[i][j] = 0.0;
             zeta[i][j] = 0.0;
             zeta_star[i][j] = 0.0;
-//         }
-//         std::cout << i << " : " << j << " = " << zeta[i][j]<< std::endl;
       }
     }
     zeta[xdim/2][ydim/2] = 1.0;
     zeta_star[xdim/2][ydim/2] = 1.0;
-    std::cout <<  zeta[xdim/2][ydim/2] << std::endl;
+//    std::cout <<  zeta[xdim/2][ydim/2] << std::endl;
+
     double x = myGrid.get_x();
     double y = myGrid.get_y();
     double dx = myGrid.get_dx();
     double dy = myGrid.get_dy();
     double** h = myGrid.get_h();
     double he,hw,hn,hs;
-    for(int t=0;t<time/dt;t++){
+    NcFile ofile("output.nc", NcFile::Replace);
+    // add dimensions
+    NcDim *dim_x = ofile.add_dim("x", xdim);
+    NcDim *dim_y = ofile.add_dim("y", ydim);
+    NcDim *dim_t = ofile.add_dim("time");
+   
+    // create variables
+    NcVar *var_z = ofile.add_var("zeta", ncFloat, dim_t, dim_y, dim_x);
+    var_z->add_att("units", "meter");
+    var_z->add_att("long_name", "free surface height");
+
+    for(int t=0;t<=time/dt;t++){
+    
             for(int j=1;j<y/dy+1;j++){
                     for(int k=1;k<x/dx+1;k++){
                             u[j][k]=u[j][k]-dt*gravity*(zeta[j][k+1]-zeta[j][k])/dx;
@@ -89,16 +97,22 @@ int solve(Grid myGrid, float dt,float time, float epsilon){
 
             if(t%5==0){
                     //std::cout <<  zeta[xdim/2][ydim/2] << std::endl;
-                    std::cout <<  t << " : " << zeta[xdim/2][ydim/2]<< std::endl;
-                    //add.put_data(zeta,u,v);
+                    std::cout <<  t/5 << std::endl;
+                    var_z->put_rec(&zeta[0][0],t/5);
             }
 
     }
+    ofile.close();
 
     return 0;
 }
 
 int main(){
+//  //open params.txt and read
+//  ifstream inputs;
+//  inputs.open("params.txt");
+//  double x,y,dx,dy
+//  while(inputs >> x >> y >>)
   Grid a(500,500,10,10,true);
   a.setDepth(10);
   double k;
