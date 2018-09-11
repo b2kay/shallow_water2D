@@ -3,6 +3,7 @@
 
 ## Compilation and Run
  make
+ 
  ./main.x
 
 ## plot
