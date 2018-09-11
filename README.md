@@ -1,5 +1,5 @@
 # shallow_water2D
-1D Shallow Water Equation Solver
+2D Shallow Water Equation Solver
 
 ## Compilation and Run
  make
