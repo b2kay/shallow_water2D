@@ -5,6 +5,7 @@ class Grid{
     double x_length; // length in x direction
     double y_length; // length in y direction
     double** h; // the depth in 2 dimension
+    //grid parameters
     double dx; //grid spacing in x direction
     double dy; // grid spacing in y direction
     bool isflat; // the depth type

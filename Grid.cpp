@@ -16,15 +16,21 @@ void Grid::setDepth(double m_h){
   grid_dimx= x_length/dx+2;
   grid_dimy = y_length/dy+2;
   h = new double*[grid_dimx];
+  //initialize h
   if(isflat){
     for(int i = 0; i < grid_dimx; i++){
       h[i] = new double[grid_dimy];
     }
-    for(int i = 0; i < grid_dimx; i++){
-      for(int j = 0; j < grid_dimy; j++){
+    for(int i = 1; i < grid_dimx-1; i++){
+      for(int j = 1; j < grid_dimy-1; j++){
         h[i][j] = m_h;
+
 //        std::cout << i << " : " << j << " = " << h[i][j]<< std::endl;
       }
+    for(int i = 1; i < grid_dimx-1; i++){
+        h[i][0] = 0;
+        h[0][i] = 0;
+    }
     }
     
   }else{
