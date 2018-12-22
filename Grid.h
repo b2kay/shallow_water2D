@@ -13,6 +13,8 @@ class Grid{
     double** v; // the depth in 2 dimension
     double** zeta; // the depth in 2 dimension
     double** zeta_star; // the depth in 2 dimension
+    double hmax; // the depth in 2 dimension
+    double hmin; // the depth in 2 dimension
     //grid parameters
     double dx; //grid spacing in x direction
     double dy; // grid spacing in y direction

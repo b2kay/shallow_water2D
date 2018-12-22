@@ -1,5 +1,7 @@
 #include<iostream>
 #include <cmath>
+#include<cstdlib>
+#include <algorithm>
 #include "Grid.h"
 
 template <class T>
@@ -13,7 +15,7 @@ T** array2d(int m, int n){
 
 Grid::Grid(double m_x, double m_y, double m_dx, double m_dy, bool m_flat) : x_length(m_x), y_length(m_y), dx(m_dx), dy(m_dy), isflat(m_flat){} 
 void Grid::setDepth(double m_h){
-  grid_dimx= x_length/dx+2;
+  grid_dimx = x_length/dx+2;
   grid_dimy = y_length/dy+2;
   h0 = new double*[grid_dimx];
   //initialize h
@@ -68,8 +70,20 @@ void Grid::show(){
   std::cout << "Min Depth : "  << std::endl;
 }
 void Grid::maxDepth(){
+  hmax = 0;
+  for(int k=0; k<grid_dimx;k++){
+    for(int j=0; k<grid_dimy;j++){
+      hmax = fmax(hmax,h0[k][j]);
+    }
+  }
 }
 void Grid::minDepth(){
+  hmin = 0;
+  for(int k=0; k<grid_dimx;k++){
+    for(int j=0; k<grid_dimy;j++){
+      hmin = fmin(hmin,h0[k][j]);
+    }
+  }
 }
 void Grid::initialize(int mode=1){
   h = array2d<double>(grid_dimx,grid_dimy);
@@ -100,7 +114,7 @@ void Grid::solve(Grid myGrid, float dt,float time, float epsilon){
     double min_spacing = myGrid.get_dx();
     if (min_spacing > myGrid.get_dy())
         min_spacing = myGrid.get_dy();
-    if(dt > (min_spacing / (sqrt(2*gravity*10)) )){
+    if(dt > (min_spacing / (sqrt(2*gravity*)) )){
         std::cout << "Error! Stability Criteria is not satisfied." << std::endl;
     }
     double x = myGrid.get_x();
