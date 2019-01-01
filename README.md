@@ -1,5 +1,6 @@
 # shallow_water2D
 2D Shallow Water Equation Solver
+![alt text](https://github.com/b2kay/shallow_water2D/blob/master/anim.gif "flat")
 ## Requirements
  apt-get install libnetcdf libnetcdf-dev
  apt install libnetcdf-c++4-dev libnetcdf-cxx-legacy-dev
