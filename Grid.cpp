@@ -7,7 +7,7 @@
 #include "Grid.h"
 // templte function for 2d array creation
 template <class T>
-T** array2d(int m, int n){
+T** array2d(int m, int n){ //(dimx,dimy)
   // allocate contiguous 2d array in memory A[y][x]
   T** A = new T*[n];
   T* B = new T[m*n];
@@ -18,14 +18,14 @@ T** array2d(int m, int n){
 }
 
 // save function for octave data
-void save(double** data, int timestep,int dimy, int dimx)
+void save(double** data, int timestep,int dimx, int dimy)
 {
   std::ofstream myfile;
   char filename[11];
   sprintf(filename,"./eta/eta%05d.dat", timestep);
   myfile.open(filename);
-  for (int i=0;i<dimy;i++){
-    for (int j = 0; j < dimx; j++){
+  for (int j = 0; j < dimy; j++){
+    for (int i=0;i<dimx;i++){
       myfile << data[j][i] << " ";
     }
     myfile << "\n";
@@ -38,16 +38,16 @@ Grid::Grid(double m_x, double m_y, double m_dx, double m_dy, bathy m_slope) : x_
 void Grid::setDepth(double m_h){
   grid_dimx = x_length/dx+2;
   grid_dimy = y_length/dy+2;
-  h0 = new double*[grid_dimx];
-  for(int i = 0; i < grid_dimx; i++){
-    h0[i] = new double[grid_dimy];
+  h0 = new double*[grid_dimy];
+  for(int i = 0; i < grid_dimy; i++){
+    h0[i] = new double[grid_dimx];
   }
   //initialize h0
   if(slope == flat){ // flat
     std::cout << "Flat case"<< std::endl;
-    for(int i = 1; i < grid_dimx-1; i++){
-      for(int j = 1; j < grid_dimy-1; j++){
-        h0[i][j] = m_h;
+    for(int j = 1; j < grid_dimy-1; j++){
+      for(int i = 1; i < grid_dimx-1; i++){
+        h0[j][i] = m_h;
       }
     }
     
@@ -68,8 +68,8 @@ void Grid::setDepth(double m_h){
     float y_step, cum_y_step;
     y_step = m_h/(grid_dimy-3);
     cum_y_step = 0;
-    for(int i = 1; i < grid_dimy-1; i++){
-      for(int j = 1; j < grid_dimx-1; j++){
+    for(int i = 0; i < grid_dimy; i++){
+      for(int j = 0; j < grid_dimx; j++){
         h0[i][j] = cum_y_step;
       }
       cum_y_step += y_step;
@@ -106,10 +106,10 @@ void Grid::maxDepth(){
   }
 }
 void Grid::minDepth(){
-  hmin = 0;
-  for(int k=0; k<grid_dimx;k++){
-    for(int j=0; j<grid_dimy;j++){
-      hmin = fmin(hmin,h0[k][j]);
+  hmin = h0[1][1];
+  for(int j=1; j<grid_dimy-1;j++){
+    for(int k=1; k<grid_dimx-1;k++){
+      hmin = fmin(hmin,h0[j][k]);
     }
   }
 }
@@ -128,7 +128,7 @@ void Grid::initialize(){
         h[k][j] = h0[k][j]+zeta[k][j];
         u[k][j] = 0.0;
         v[k][j] = 0.0;
-      }
+     }
     }
     //zeta[grid_dimx/2][grid_dimy/2] = 1.0;
     for(int k=grid_dimy/2; k<grid_dimy/2+2;k++){
@@ -180,7 +180,7 @@ int Grid::solve(Grid myGrid, float dt,float time, float epsilon){
     // simulation loop
     std::cout << "Simulation Loop" << std::endl;
     for(int t=0;t<time/dt+1;t++){
-       // redict velocities
+       // predict velocities
        for(int j=1;j<grid_dimy-1;j++){
          for(int k=1;k<grid_dimx-1;k++){
            u[j][k]=u[j][k]-dt*gravity*(zeta[j][k+1]-zeta[j][k])/dx;
@@ -218,16 +218,15 @@ int Grid::solve(Grid myGrid, float dt,float time, float epsilon){
        }
        if(t%5==0){
          var_z->put_rec(&zeta[0][0],t/5);
-         save(zeta, t, grid_dimx, grid_dimy);
        }
-       if(t%200==0){
+       if(t%50==0){
          std::cout << "Zeta at " << (t)*dt << "s saved." << std::endl;
+         save(zeta, t, grid_dimx, grid_dimy);
        }
     } 
     // end of simulation loop
     std::cout << std::endl << "End of Simulation Loop" << std::endl;
     ofile.close();
-
   }
   return 0;
 }
